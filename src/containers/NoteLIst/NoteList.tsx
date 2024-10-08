@@ -12,7 +12,7 @@ interface INoteList {
 
 export default function NoteList({noteList}: {noteList: INoteList[]}) {
   return (
-    <div className='flex flex-col justify-center container p-6' >
+    <div className='flex flex-col justify-center p-6' >
         {
             noteList.map((note) => (
                 <TextEditor 

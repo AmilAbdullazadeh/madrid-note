@@ -29,12 +29,12 @@ export default function TextEditor({
   return (
     <div
       onClick={onClick}
-      className="flex flex-col container"
+      className="flex flex-col"
       style={{ backgroundColor: isCardHovered ? "rgba(0,0,0,0.1)" : "white" }}
       onMouseEnter={() => setIsCardHovered(true)}
       onMouseLeave={() => setIsCardHovered(false)}
     >
-      <div className="container">
+      <div className="">
         <h5 className="text-white bg-blue-500 p-2 rounded-t-lg">{title}</h5>
         <Trash
           size={20}

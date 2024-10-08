@@ -9,12 +9,12 @@ export default function SearchBar({
 }: ISearchBarProps) {
   return (
     <div 
-        className="flex items-center justify-center"
+        className="flex items-end justify-center"
     >
         <input 
             type="text" 
             placeholder={placholder} 
-            className="border border-gray-300 p-2 w-full"
+            className="w-[300px] border rounded-md border-gray-300 p-2"
             onChange={(e) => onSearch(e.target.value)}
         />
     </div>
