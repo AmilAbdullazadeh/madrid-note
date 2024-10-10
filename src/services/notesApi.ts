@@ -8,6 +8,16 @@ export const notesApi = createApi({
     baseQuery: fetchBaseQuery({ baseUrl }),
     endpoints: (builder) => ({
         fetchNotes: builder.query({ query: () => "/notes" }),
+        getNoteById: builder.query({
+            query: (id) => `/notes/${id}`,
+        }),
+        updateNote: builder.mutation({
+            query: ({ id, ...body }) => ({
+                url: `/notes/${id}`,
+                method: "PATCH",
+                body,
+            }),
+        }),
         createNote: builder.mutation({
             query: (body) => ({
                 url: "/notes",
@@ -18,4 +28,4 @@ export const notesApi = createApi({
     })
 })
 
-export const { useFetchNotesQuery, useCreateNoteMutation } = notesApi
+export const { useFetchNotesQuery, useGetNoteByIdQuery, useUpdateNoteMutation, useCreateNoteMutation } = notesApi

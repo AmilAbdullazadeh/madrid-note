@@ -9,6 +9,7 @@ import Note from "./pages/Note/Note.tsx";
 import NoteCreate from "./pages/NoteCreate/NoteCreate.tsx";
 import PageNotFound from "./pages/PageNotFound/PageNotFound.tsx";
 import NoteBrowse from "./pages/NoteBrowse/NoteBrowse.tsx";
+import NoteForm from "./components/NoteForm/NoteForm.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -18,7 +19,7 @@ createRoot(document.getElementById("root")!).render(
           <Route path="/" element={<App />}>
             <Route path="/" element={<NoteBrowse />} />
             <Route path="/note/new" element={<NoteCreate />} />
-            <Route path="/note/:id" element={<Note />} />
+            <Route path="/note/:id" element={<NoteForm />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
         </Routes>

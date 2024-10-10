@@ -13,7 +13,7 @@ export default function NoteBrowse() {
     }
 
     const filteredNotes = data?.filter((note: any) => {
-        return note.title.toLowerCase().includes(searchTerm.toLowerCase()) || note.content.toLowerCase().includes(searchTerm.toLowerCase())
+        return note.title.toLocaleLowerCase().includes(searchTerm.toLowerCase()) || note.content.toLocaleLowerCase().includes(searchTerm.toLowerCase())
     })
 
   return (

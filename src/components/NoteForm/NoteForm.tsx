@@ -1,27 +1,40 @@
 import { useState } from "react";
 import Button from "../Button/Button";
+import { useGetNoteByIdQuery, useUpdateNoteMutation } from "../../services/notesApi";
+import { useNavigate, useParams } from "react-router-dom";
 
-interface NoteFormProps {
-    isUpdate: boolean;
-    note: any;
-    onClickEdit: () => void;
-    onClickDelete: () => void;
-    onClickSave: (note: any) => void;
-}
+export default function NoteForm() {
 
-export default function NoteForm<NoteFormProps>({
-    isUpdate = false,
-    note,
-    onClickEdit,
-    onClickDelete,
-    onClickSave,
-}) {
+    let { id } = useParams();
+    const route = useNavigate();
+    
+    const { data } = useGetNoteByIdQuery(id);
 
-    const [title, setTitle] = useState(note?.title || "");
-    const [content, setContent] = useState(note?.content || "");
+    const [updateNote] = useUpdateNoteMutation();
 
-    const handleSubmit = () => {
-        onClickSave({ title, content });
+    const [isEditing, setIsEditing] = useState(false);
+
+    const [title, setTitle] = useState(data?.title || "");
+    const [content, setContent] = useState(data?.content || "");
+
+    const handleEdit = () => {
+        setIsEditing(true)
+    }
+
+    const handleSubmit = async () => {
+        setIsEditing(false)
+        const body = {
+            title,
+            content,
+            created_at: data?.created_at || new Date().toISOString(),
+            updated_at: new Date().toISOString()
+        }
+        try {
+            await updateNote({ id, ...body }).unwrap(); // unwrapping the response to handle errors
+            route('/')
+        } catch (error) {
+            console.error("Failed to update the note:", error);
+        }
     }
 
   return (
@@ -37,7 +50,8 @@ export default function NoteForm<NoteFormProps>({
                  type="text"
                  name="title" 
                  id="title" 
-                 value={note?.title} 
+                 defaultValue={data?.title} 
+                 disabled={!isEditing && data?.title}
                  className="w-full mt-1 p-2 border border-gray-300 rounded-md" 
                  onChange={(e) => setTitle(e.target.value)}
             />
@@ -50,14 +64,21 @@ export default function NoteForm<NoteFormProps>({
                  type="text"
                  name="content" 
                  id="content" 
-                 value={note?.content} 
+                 defaultValue={data?.content} 
+                 disabled={!isEditing && data?.content}
                  className="w-full mt-1 p-2 border border-gray-300 rounded-md" 
                  onChange={(e) => setContent(e.target.value)}
             />
         </div>
 
         <div className="my-5 w-[300px]" >
-            <Button onClick={handleSubmit} >Save</Button>
+            {
+                (data && !isEditing) ? (
+                    <Button onClick={handleEdit} >Edit</Button>
+                ) : (
+                    <Button onClick={handleSubmit} >Save</Button>
+                )
+            }
         </div>
 
 
