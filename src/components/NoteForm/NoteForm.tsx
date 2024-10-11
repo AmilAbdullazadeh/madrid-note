@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Button from "../Button/Button";
-import { useGetNoteByIdQuery, useUpdateNoteMutation } from "../../services/notesApi";
+import { useCreateNoteMutation, useDeleteNoteMutation, useGetNoteByIdQuery, useUpdateNoteMutation } from "../../services/notesApi";
 import { useNavigate, useParams } from "react-router-dom";
 
 export default function NoteForm() {
@@ -11,6 +11,8 @@ export default function NoteForm() {
     const { data } = useGetNoteByIdQuery(id);
 
     const [updateNote] = useUpdateNoteMutation();
+    const [createNote] = useCreateNoteMutation();
+    const [deleteNote] = useDeleteNoteMutation()
 
     const [isEditing, setIsEditing] = useState(false);
 
@@ -30,12 +32,25 @@ export default function NoteForm() {
             updated_at: new Date().toISOString()
         }
         try {
-            await updateNote({ id, ...body }).unwrap(); // unwrapping the response to handle errors
+            if (id) {
+                await updateNote({ id, ...body })
+            } else {
+                await createNote(body)
+            }
             route('/')
         } catch (error) {
             console.error("Failed to update the note:", error);
         }
     }
+
+    const handleDelete = async () => {
+        try {
+            await deleteNote(id)
+            route('/')
+        } catch (error) {
+            console.error("Failed to update the note:", error);
+        }
+      }
 
   return (
     <div className="w-full flex flex-col items-center justify-between" >
@@ -74,7 +89,10 @@ export default function NoteForm() {
         <div className="my-5 w-[300px]" >
             {
                 (data && !isEditing) ? (
-                    <Button onClick={handleEdit} >Edit</Button>
+                    <div className="flex gap-2">
+                        <Button onClick={handleEdit} >Edit</Button>
+                        <Button onClick={handleDelete} className='bg-red-500 hover:bg-red-700' >Delete</Button>
+                    </div>
                 ) : (
                     <Button onClick={handleSubmit} >Save</Button>
                 )

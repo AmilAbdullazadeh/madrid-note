@@ -6,7 +6,7 @@ import { useFetchNotesQuery } from '../../services/notesApi'
 
 export default function NoteBrowse() {
     const [searchTerm, setSearchTerm] = useState('')
-    const { data, error, isLoading } = useFetchNotesQuery(); 
+    const { data, error, isLoading } = useFetchNotesQuery({}); 
 
     const handleSearch = (searchTerm: string) => {
         setSearchTerm(searchTerm)
@@ -15,6 +15,10 @@ export default function NoteBrowse() {
     const filteredNotes = data?.filter((note: any) => {
         return note.title.toLocaleLowerCase().includes(searchTerm.toLowerCase()) || note.content.toLocaleLowerCase().includes(searchTerm.toLowerCase())
     })
+
+    if (error) return <div>Error: {error.message}</div>
+
+    if (isLoading) return <div>Loading...</div>
 
   return (
     <div>

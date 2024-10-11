@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom'
+import { useDeleteNoteMutation, useFetchNotesQuery } from '../../services/notesApi';
 
 interface NoteProps {
     notes: any;
 }
 
 export default function Note({notes}: NoteProps) {
+
   return (
     <div className='flex flex-wrap' >
             {
@@ -14,7 +16,6 @@ export default function Note({notes}: NoteProps) {
                     <p className='text-sm' >{note.content}</p>
                     <div className='flex justify-between' >
                         <Link to={`/note/${note.id}`} className='text-blue-500' >View</Link>
-                        <Link to={`/note/${note.id}/edit`} className='text-blue-500' >Edit</Link>
                     </div>
                 </div>
             ))
